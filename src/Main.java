@@ -1,10 +1,29 @@
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.FileWriter;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner lectura = new Scanner(System.in);
         ConsultExchangeRate consult = new ConsultExchangeRate();
         ExchangeCoin exchange = new ExchangeCoin();
+        History history = new History();
+
+
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .setPrettyPrinting()
+                .create();
+
+        FileWriter record = new FileWriter("historial.json");
+        record.write(gson.toJson(history));
+        record.close();
+
+
 
         int option = 0;
         while (option != 10) {
@@ -83,11 +102,19 @@ public class Main {
                     double exchangeRate = coin.conversion_rates().get(monedaCambio);
                     double conversion = exchange.exchange(qty, exchangeRate);
                     System.out.println(qty + " " + monedaInicial + " equivalen a: " + conversion +" "+ monedaCambio);
+
+                    history.addHistory(monedaInicial, monedaCambio, qty, conversion);
+
                 } catch (Exception e) {
                     System.out.println("Error al realizar la conversion: " + e.getMessage());
                 }
             }
         }
-        System.out.println("Gracias por usar mi conversor!");
+
+        history.showHistory();
+
+        System.out.println("""
+                    Gracias por usar mi conversor de monedas \n
+                    Desarrollado por Victor Perdomo""");
     }
 }
