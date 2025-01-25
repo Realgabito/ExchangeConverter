@@ -1,4 +1,4 @@
-name: Build and Test Java App
+name: Build, and Run Java App
 
 on:
   push:
@@ -13,21 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Revisa el código desde tu repositorio
+      # 1. Revisa el código desde tu repositorio
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Configura Java
+      # 2. Configura Java
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17' 
+          java-version: '17'
 
-      # Configura el API Key desde el secreto
+      # 3. Configura la API Key desde el secreto
       - name: Set environment variable
         run: echo "EXCHANGE_RATE_API_KEY=${{ secrets.EXCHANGE_RATE_API_KEY }}" >> $GITHUB_ENV
 
-      # Construye y prueba el proyecto usando Maven
+      # 4. Construye el proyecto usando Maven
       - name: Build with Maven
         run: mvn clean install
+
+
+      # 5. Ejecuta la aplicación de consola
+      - name: Run Console App
+        run: mvn exec:java -Dexec.mainClass="ConsultExchangeRate" -Dexec.args="USD"
