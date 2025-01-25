@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 
 public class ConsultExchangeRate {
     public Coin lookRate(String coinName) {
-        String id = "8ddef611af2d9a57bdf13230";
+        String id = System.getenv("EXCHANGE_RATE_API_KEY");
         URI direccion = URI.create("https://v6.exchangerate-api.com/v6/"+id+"/latest/"+ coinName);
 
         HttpClient client = HttpClient.newHttpClient();
