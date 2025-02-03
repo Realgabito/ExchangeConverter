@@ -114,7 +114,7 @@ public class Main {
         history.showHistory();
 
         System.out.println("""
-                    Gracias por usar mi conversor de monedas \n
+                    Gracias por usar Exchange Converter \n
                     Desarrollado por Victor Perdomo""");
     }
 }
